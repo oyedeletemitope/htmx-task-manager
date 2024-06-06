@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+  </head>
+  <body>
+    <h1>Task Manager</h1>
+    <form
+      hx-post="/add"
+      hx-target="#task-list-container"
+      hx-swap="innerHTML"
+      hx-on="htmx:afterRequest"
+    >
+      <input
+        type="text"
+        name="task"
+        placeholder="Enter a new task..."
+        required
+      />
+      <button type="submit">Add Task</button>
+    </form>
+
+    <div id="task-list-container">
+      <% tasks.forEach(function(task) { %>
+      <div id="task-<%= task.id %>">
+        <%= task.task %>
+        <button
+          hx-post="/delete/<%= task.id %>"
+          hx-target="#task-list-container"
+          hx-swap="innerHTML"
+        >
+          Delete
+        </button>
+      </div>
+      <% }); %>
+    </div>
+
+    <script>
+      document.body.addEventListener("htmx:afterRequest", function (evt) {
+        if (evt.detail.elt.matches("form")) {
+          evt.detail.elt.reset();
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+<% tasks.forEach(function(task) { %>
+<div id="task-<%= task.id %>">
+  <%= task.task %>
+  <button
+    hx-post="/delete/<%= task.id %>"
+    hx-target="#task-list-container"
+    hx-swap="innerHTML"
+  >
+    Delete
+  </button>
+</div>
+<% }); %>
